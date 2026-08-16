@@ -1,0 +1,72 @@
+{
+  "synthetic": true,
+  "source": {
+    "package": "@etweisberg/garmin-connect-mcp",
+    "version": "0.1.23",
+    "commit": "87d0ea059fb67f1ce65ac05100df74c3c3777c84",
+    "captured_on": "2026-08-16"
+  },
+  "guarantees": [
+    "No raw Garmin payload was written to disk.",
+    "Credentials, cookies, CSRF tokens, personal identifiers, names and locations are absent.",
+    "Keys, nesting and JSON primitive types reflect live payloads from the pinned MCP version.",
+    "Arrays longer than 12 elements contain deterministic first, middle and last representatives.",
+    "Numeric values are deterministically transformed and are not athlete measurements."
+  ],
+  "calls": [
+    "check-session",
+    "list-activities",
+    "get-activity",
+    "get-activity-details",
+    "get-activity-splits",
+    "get-activity-hr-zones",
+    "get-activity",
+    "get-activity-details",
+    "get-activity-splits",
+    "get-activity-hr-zones",
+    "get-hr-zones-config",
+    "get-power-zones"
+  ],
+  "files": [
+    {
+      "file": "cycling-activity.json",
+      "sha256": "137ff9a6e168b76c72d4c9dc48a92a5ffcd7779ad887a11d471107cc45f2d247"
+    },
+    {
+      "file": "cycling-details.json",
+      "sha256": "8428c0a048966ecf4950dccbd8ce10d6915a260488f119c99d7fa744bf72ecf2"
+    },
+    {
+      "file": "cycling-hr-zones.json",
+      "sha256": "294f12e9bf39d5b70c58a46e8d5129f3c046db59857428818eb0d0327ca6586f"
+    },
+    {
+      "file": "cycling-splits.json",
+      "sha256": "b38b80105d9c35d528dae6146fcd6d1d4b96d6ec07c08cd0ee6ad90a5606312d"
+    },
+    {
+      "file": "hr-zones-config.json",
+      "sha256": "7d7072a777d33eb2c3126cb51b28df062b79859f128b2f47578249f7e3444ee4"
+    },
+    {
+      "file": "power-zones.json",
+      "sha256": "ccb601d699decaa93b85d892b94192d9493669e333bb11435257d449c73faff5"
+    },
+    {
+      "file": "running-activity.json",
+      "sha256": "27134f9c7b98a8df3e96890f5f932155be7448a183983cdd344d2f1274100af8"
+    },
+    {
+      "file": "running-details.json",
+      "sha256": "a82427de7ecdb5efb0d53cff8f7446064f26d9e67c1264c428022b6145bcc8a1"
+    },
+    {
+      "file": "running-hr-zones.json",
+      "sha256": "b3e123ddcf2051882b8cf28b5efa36817493afdd4b68fc38fafa48924597ec2d"
+    },
+    {
+      "file": "running-splits.json",
+      "sha256": "09aaa504397a1f6cf7b72528103c3e7bc5d3514d17f1163a20030c3e43dad2c5"
+    }
+  ]
+}

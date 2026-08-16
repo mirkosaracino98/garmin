@@ -1,0 +1,70 @@
+{
+  "activityId": 9000000002,
+  "measurementCount": 16,
+  "metricsCount": 5492,
+  "totalMetricsCount": 5492,
+  "metricDescriptors": [
+    {
+      "metricsIndex": 0,
+      "key": "directLongitude",
+      "unit": {
+        "id": 60,
+        "key": "dd",
+        "factor": 1
+      }
+    },
+    {
+      "metricsIndex": 8,
+      "key": "directTimestamp",
+      "unit": {
+        "id": 120,
+        "key": "gmt",
+        "factor": 0
+      }
+    },
+    {
+      "metricsIndex": 15,
+      "key": "directRespirationRate",
+      "unit": {
+        "id": 513,
+        "key": "breathsPerMinute",
+        "factor": 1
+      }
+    }
+  ],
+  "activityDetailMetrics": [
+    {
+      "metrics": [
+        10.796570805832744,
+        1786688965000,
+        null
+      ]
+    },
+    {
+      "metrics": [
+        10.774571411311626,
+        1786694568000,
+        31.110000610351562
+      ]
+    },
+    {
+      "metrics": [
+        10.796665772795677,
+        1786702808000,
+        32.720001220703125
+      ]
+    }
+  ],
+  "geoPolylineDTO": {
+    "startPoint": null,
+    "endPoint": null,
+    "minLat": null,
+    "maxLat": null,
+    "minLon": null,
+    "maxLon": null,
+    "polyline": []
+  },
+  "heartRateDTOs": null,
+  "pendingData": null,
+  "detailsAvailable": true
+}

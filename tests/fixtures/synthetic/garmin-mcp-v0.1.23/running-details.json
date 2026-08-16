@@ -1,0 +1,70 @@
+{
+  "activityId": 9000000001,
+  "measurementCount": 23,
+  "metricsCount": 1806,
+  "totalMetricsCount": 1806,
+  "metricDescriptors": [
+    {
+      "metricsIndex": 0,
+      "key": "directVerticalOscillation",
+      "unit": {
+        "id": 5,
+        "key": "centimeter",
+        "factor": 1
+      }
+    },
+    {
+      "metricsIndex": 11,
+      "key": "directAirTemperature",
+      "unit": {
+        "id": 227,
+        "key": "celcius",
+        "factor": 1
+      }
+    },
+    {
+      "metricsIndex": 22,
+      "key": "directVerticalSpeed",
+      "unit": {
+        "id": 20,
+        "key": "mps",
+        "factor": 0.1
+      }
+    }
+  ],
+  "activityDetailMetrics": [
+    {
+      "metrics": [
+        4.920000076293945,
+        33,
+        null
+      ]
+    },
+    {
+      "metrics": [
+        9.180000305175781,
+        29,
+        0
+      ]
+    },
+    {
+      "metrics": [
+        9.259999847412109,
+        29,
+        0
+      ]
+    }
+  ],
+  "geoPolylineDTO": {
+    "startPoint": null,
+    "endPoint": null,
+    "minLat": null,
+    "maxLat": null,
+    "minLon": null,
+    "maxLon": null,
+    "polyline": []
+  },
+  "heartRateDTOs": null,
+  "pendingData": null,
+  "detailsAvailable": true
+}
