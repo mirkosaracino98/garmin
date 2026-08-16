@@ -27,3 +27,11 @@ _Avoid_: payload elaborato, dato pulito
 **Segnale derivato**:
 Risultato rigenerabile calcolato da osservazioni normalizzate mediante una regola identificata e versionata.
 _Avoid_: dato normalizzato, osservazione, verdetto
+
+**Proposta generativa**:
+Contributo strutturato e non autoritativo prodotto da un modello linguistico a partire da evidenze minimizzate; non può sostituire osservazioni, segnali derivati o vincoli deterministici.
+_Avoid_: decisione del coach, piano LLM, verdetto del modello
+
+**Esito degradato**:
+Risultato esplicitamente incompleto prodotto senza una proposta generativa, che conserva evidenze e vincoli deterministici e richiede revisione umana quando non esiste già un piano valido.
+_Avoid_: fallback LLM, piano completo, errore silenzioso
