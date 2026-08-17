@@ -115,3 +115,15 @@ _Avoid_: completamento, aderenza, attività simile
 **Esito di esecuzione**:
 Valutazione dell'esecuzione di una seduta pianificata rispetto al suo intento e ai suoi criteri, calcolata soltanto dopo una corrispondenza sufficientemente affidabile.
 _Avoid_: matching, attività completata, successo della seduta
+
+**Contributo del ciclismo**:
+Segnale derivato composto che mantiene distinti il contributo aerobico e la fatica residua di un'attività cycling, senza convertirli in volume o specificità running.
+_Avoid_: equivalenza bici-corsa, chilometri equivalenti, saldo ciclismo
+
+**Contributo aerobico del ciclismo**:
+Componente del contributo del ciclismo che descrive l'esposizione aerobica osservata nel linguaggio del cycling; può condizionare il piano ma non vale come volume o aderenza running.
+_Avoid_: beneficio running, minuti corsa equivalenti, sostituzione automatica
+
+**Fatica residua del ciclismo**:
+Componente del contributo del ciclismo che rappresenta quanto la risposta sistemica e l'impegno locale delle gambe possono condizionare le corse successive; resta distinta dal recupero Whoop e dal carico neuromuscolare della palestra.
+_Avoid_: recovery cycling, DOMS cycling, carico gambe palestra
