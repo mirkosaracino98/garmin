@@ -91,3 +91,15 @@ _Avoid_: errore del sensore, media dei segnali, dato sospetto
 **Copertura del carico**:
 Quota della durata osservata in una finestra per cui il carico sistemico dispone di frequenza cardiaca o RPE validi, distinta dalla completezza dell'acquisizione delle attività.
 _Avoid_: qualità dell'osservazione, confidenza del piano, completezza dei dati
+
+**Target prescrittivo**:
+Intervallo personale che l'atleta deve cercare di seguire durante una parte della seduta; la metrica scelta dipende dall'intento e deve essere affidabile per quel contesto.
+_Avoid_: riferimento, valore osservato, obiettivo generico
+
+**Guardrail di intensità**:
+Limite complementare usato per impedire che la seduta tradisca il proprio intento quando il target prescrittivo non racconta tutta la risposta dell'atleta.
+_Avoid_: secondo target, media dei segnali, verdetto di sicurezza
+
+**Riferimento descrittivo**:
+Intervallo mostrato per orientare o interpretare la seduta senza richiederne il rispetto; non determina da solo il completamento dell'intento.
+_Avoid_: target prescrittivo, limite, dato irrilevante
