@@ -103,3 +103,15 @@ _Avoid_: secondo target, media dei segnali, verdetto di sicurezza
 **Riferimento descrittivo**:
 Intervallo mostrato per orientare o interpretare la seduta senza richiederne il rispetto; non determina da solo il completamento dell'intento.
 _Avoid_: target prescrittivo, limite, dato irrilevante
+
+**Seduta pianificata**:
+Unità immutabile di una versione approvata del piano, identificata da intento, sport, collocazione prevista e criteri di esecuzione; resta riconoscibile anche quando viene spostata o sostituita.
+_Avoid_: attività prevista, workout Garmin, seduta completata
+
+**Corrispondenza piano-esecuzione**:
+Segnale derivato e revisionabile che collega una seduta pianificata a un'attività osservata o a una sessione palestra, conservando regola, evidenze, confidenza e interventi manuali; non giudica da solo la qualità dell'esecuzione.
+_Avoid_: completamento, aderenza, attività simile
+
+**Esito di esecuzione**:
+Valutazione dell'esecuzione di una seduta pianificata rispetto al suo intento e ai suoi criteri, calcolata soltanto dopo una corrispondenza sufficientemente affidabile.
+_Avoid_: matching, attività completata, successo della seduta
