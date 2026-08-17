@@ -59,3 +59,35 @@ _Avoid_: decisione del coach, piano LLM, verdetto del modello
 **Esito degradato**:
 Risultato esplicitamente incompleto prodotto senza una proposta generativa, che conserva evidenze e vincoli deterministici e richiede revisione umana quando non esiste già un piano valido.
 _Avoid_: fallback LLM, piano completo, errore silenzioso
+
+**Profilo di carico**:
+Segnale derivato multidimensionale che mantiene distinti il carico sistemico interno, il carico esterno specifico dello sport e il carico neuromuscolare sulle gambe; non implica equivalenza tra sport.
+_Avoid_: carico totale, chilometri equivalenti, punteggio universale
+
+**Carico sistemico interno**:
+Componente del profilo di carico che rappresenta la risposta complessiva dell'atleta a una sessione, derivata in ordine di preferenza dall'esposizione a zone cardiache, dall'RPE dichiarato o da un intervallo basato sulla sola durata.
+_Avoid_: stress totale, Training Effect, carico Garmin
+
+**Carico esterno specifico**:
+Componente del profilo di carico che descrive il lavoro osservabile nel linguaggio proprio dello sport, senza convertirlo in un'unità equivalente di un altro sport.
+_Avoid_: chilometri equivalenti, carico multisport convertito
+
+**Carico neuromuscolare sulle gambe**:
+Componente del profilo di carico che rappresenta l'impegno locale dichiarato delle gambe in una sessione palestra, distinta sia dal carico sistemico sia dalla successiva osservazione DOMS.
+_Avoid_: carico palestra totale, DOMS previsto, chilometri palestra
+
+**Intervallo di carico**:
+Stima prudente delimitata da un minimo osservato e da un limite superiore, accompagnata da confidenza esplicita quando le evidenze di carico sono incomplete.
+_Avoid_: carico imputato, valore esatto, dato mancante sostituito
+
+**Minuti di carico**:
+Indice convenzionale del carico sistemico interno ottenuto ponderando ogni minuto osservato per una fascia d'intensità da uno a cinque; rende confrontabili metodi di osservazione diversi senza dichiarare una misura fisiologica.
+_Avoid_: TRIMP, TSS, calorie, misura fisiologica
+
+**Discordanza di carico**:
+Condizione esplicita in cui due evidenze valide della stessa sessione indicano fasce d'intensità distanti almeno due livelli; nessuna delle due viene mediata o scartata silenziosamente.
+_Avoid_: errore del sensore, media dei segnali, dato sospetto
+
+**Copertura del carico**:
+Quota della durata osservata in una finestra per cui il carico sistemico dispone di frequenza cardiaca o RPE validi, distinta dalla completezza dell'acquisizione delle attività.
+_Avoid_: qualità dell'osservazione, confidenza del piano, completezza dei dati
