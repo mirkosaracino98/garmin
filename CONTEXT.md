@@ -108,6 +108,38 @@ _Avoid_: target prescrittivo, limite, dato irrilevante
 Unità immutabile di una versione approvata del piano, identificata da intento, sport, collocazione prevista e criteri di esecuzione; resta riconoscibile anche quando viene spostata o sostituita.
 _Avoid_: attività prevista, workout Garmin, seduta completata
 
+**Bozza di piano**:
+Versione proposta dal coach che può includere adattamenti automatici ma non governa l'allenamento finché l'atleta non la approva integralmente.
+_Avoid_: piano automatico, piano attivo, piano approvato
+
+**Versione approvata del piano**:
+Versione della bozza accettata esplicitamente dall'atleta e usata come riferimento corrente per sedute, matching e revisioni successive.
+_Avoid_: bozza, proposta, piano generato
+
+**Conferma specifica**:
+Accettazione esplicita di un singolo cambiamento importante richiesta prima dell'approvazione complessiva della bozza; resta distinta dalla conferma finale dell'intera versione.
+_Avoid_: approvazione implicita, conferma automatica, approvazione del piano
+
+**Adattamento automaticamente proponibile**:
+Modifica entro policy che il coach può inserire in una bozza senza conferma specifica, ma che resta inattiva fino all'approvazione finale dell'atleta.
+_Avoid_: adattamento automatico, modifica applicata, auto-approvazione
+
+**Seduta impegnativa**:
+Seduta running o cycling che occupa uno dei due slot settimanali di stress elevato per intensità, struttura o durata relativa; una corsa lunga facile vi rientra solo quando il suo profilo la rende impegnativa.
+_Avoid_: allenamento importante, seduta chiave, qualsiasi lungo
+
+**Alternativa conservativa giornaliera**:
+Variazione temporanea e non persistente che riduce o elimina lo stress della seduta corrente senza modificare la versione approvata del piano.
+_Avoid_: adattamento del piano, ripianificazione automatica, nuova versione
+
+**Segnale negativo concordante**:
+Condizione prudenziale in cui un trend Whoop sfavorevole rispetto alla baseline personale coincide con almeno un'evidenza indipendente soggettiva, prestativa o di carico; non costituisce una valutazione clinica.
+_Avoid_: recovery basso, diagnosi, singolo giorno negativo
+
+**Settimana tollerata**:
+Finestra di sette giorni con evidenze sufficienti in cui il carico eseguito resta entro l'intervallo approvato e non emergono sintomi o segnali negativi concordanti; una settimana deliberatamente ridotta non dimostra tolleranza a un carico superiore.
+_Avoid_: settimana completata, buona settimana, aderenza settimanale
+
 **Corrispondenza piano-esecuzione**:
 Segnale derivato e revisionabile che collega una seduta pianificata a un'attività osservata o a una sessione palestra, conservando regola, evidenze, confidenza e interventi manuali; non giudica da solo la qualità dell'esecuzione.
 _Avoid_: completamento, aderenza, attività simile
