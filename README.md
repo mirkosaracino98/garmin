@@ -2,7 +2,46 @@
 
 AI Running Coach è un progetto per costruire un coach personale, locale e **CLI-first** che usa i dati degli allenamenti per proporre e adattare un piano di corsa. L'obiettivo è mantenere l'atleta al centro delle decisioni: il sistema analizza, spiega e propone, mentre l'approvazione del piano e l'eventuale inserimento degli allenamenti in Garmin Connect restano manuali.
 
-> **Stato del progetto:** progettazione e specifica dell'MVP. Il repository contiene l'architettura, il modello di dominio, le decisioni tecniche e fixture sintetiche; non contiene ancora un'applicazione eseguibile.
+> **Stato del progetto:** implementazione incrementale dell'MVP. Sono disponibili il package installabile, `setup` e la diagnostica dello store locale; importazione, review e pianificazione arriveranno nei ticket successivi.
+
+## Installazione e prima configurazione
+
+Richiede Python 3.11 o successivo. Il package non ha dipendenze runtime:
+
+```text
+python -m venv .venv
+.venv\Scripts\python -m pip install .
+running-coach --version
+```
+
+Su macOS e Linux usare `.venv/bin/python` e `.venv/bin/running-coach`. È disponibile un solo entry point: `running-coach`.
+
+Senza `RUNNING_COACH_HOME`, configurazione e database vengono salvati nella directory dati dell'utente del sistema operativo. La variabile può indicare uno spazio diverso per test o uso portabile.
+
+Il setup interattivo è disponibile soltanto quando stdin e stdout sono TTY. Per automazione e agenti usare la modalità non interattiva, che scrive un singolo documento JSON su stdout:
+
+```text
+running-coach setup --non-interactive --name Ada --available-days tuesday,thursday,sunday --preferred-long-run-day sunday --goal-type 10k --goal-date 2027-04-11 --goal-mode time --target-time 00:49:30 --goal-priority high
+```
+
+`--goal-type` accetta `general`, `5k`, `10k`, `half-marathon` e `marathon`. Ogni obiettivo richiede data, modalità `completion` oppure `time` e priorità `low`, `medium` oppure `high`; `time` richiede anche `--target-time HH:MM:SS`. Le Sessioni palestra previste sono lunedì e venerdì. Rilanciare `setup` con soli campi da correggere conserva gli altri valori: un replay identico riusa le revisioni, mentre una modifica crea una nuova revisione soltanto per la configurazione cambiata.
+
+La diagnostica non inizializza né modifica lo store:
+
+```text
+running-coach doctor --format json
+```
+
+Gli stati dello store sono `valid`, `not_initialized` e `incompatible`.
+
+| Codice | Significato |
+| ---: | --- |
+| `0` | Comando riuscito; per `doctor`, store valido |
+| `2` | Input mancante/non valido oppure modalità interattiva richiesta senza TTY |
+| `3` | Store non inizializzato |
+| `5` | Store incompatibile o con schema non supportato |
+
+In modalità non interattiva anche gli errori sono JSON strutturati. Progress e diagnostica non appartenenti al risultato sono riservati a stderr.
 
 ## Obiettivo
 
@@ -101,4 +140,3 @@ Il progetto prevede di usare:
 - [`leonzzz435/garmin-ai-coach`](https://github.com/leonzzz435/garmin-ai-coach) come riferimento architetturale, senza riutilizzarne le assunzioni incompatibili con i vincoli di questo progetto.
 
 `garmin-connect-mcp` è trattato come dipendenza AGPL-3.0 eseguita fuori processo e non distribuita insieme al coach. Qualunque futura incorporazione, modifica, fork, bundle o distribuzione richiederà una nuova verifica degli obblighi di licenza.
-
