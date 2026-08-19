@@ -159,3 +159,63 @@ _Avoid_: beneficio running, minuti corsa equivalenti, sostituzione automatica
 **Fatica residua del ciclismo**:
 Componente del contributo del ciclismo che rappresenta quanto la risposta sistemica e l'impegno locale delle gambe possono condizionare le corse successive; resta distinta dal recupero Whoop e dal carico neuromuscolare della palestra.
 _Avoid_: recovery cycling, DOMS cycling, carico gambe palestra
+
+**Snapshot decisionale**:
+Insieme immutabile delle revisioni correnti di osservazioni e segnali derivati, congelato a un istante di conoscenza e usato come unico input di una revisione del coach o pianificazione.
+_Avoid_: stato corrente, copia del database, dati live
+
+**Linea di seduta**:
+Continuità dello stesso intento di allenamento attraverso versioni successive del piano; collega istanze immutabili della seduta senza confondere una sostituzione con una modifica.
+_Avoid_: seduta pianificata, identificatore della versione, workout ricorrente
+
+**Decisione del coach**:
+Esito strutturato e immutabile che applica regole e policy versionate a uno snapshot decisionale, conservando evidenze, incertezza e interventi umani senza incorporare la spiegazione renderizzata.
+_Avoid_: proposta generativa, spiegazione, log applicativo
+
+**Risultato obsoleto**:
+Segnale, snapshot o stato corrente la cui evidenza è stata revisionata o rimossa e che non può più governare nuove decisioni finché non viene rigenerato o revisionato esplicitamente.
+_Avoid_: dato cancellato, errore, ricalcolo automatico
+
+**Manifest dello snapshot**:
+Elenco immutabile delle revisioni esatte che compongono uno snapshot decisionale, identificato dal proprio cutoff e da un hash verificabile senza duplicare i valori referenziati.
+_Avoid_: copia dei dati, query corrente, cache
+
+**Evidenza di decisione**:
+Riferimento esatto e tipizzato a una revisione di osservazione, a un segnale derivato o a un'altra informazione congelata che giustifica una decisione del coach.
+_Avoid_: motivazione testuale, dato live, contesto implicito
+
+**Valore non disponibile**:
+Esito esplicito e motivato che dichiara l'impossibilità di produrre un valore da evidenze sufficienti; non coincide con zero, `null` o assenza del record.
+_Avoid_: dato mancante implicito, valore predefinito, errore silenzioso
+
+**Revisione del coach**:
+Valutazione immutabile di uno snapshot decisionale che descrive esecuzione, carico, risposta, lacune e vincoli prima di qualsiasi nuova pianificazione.
+_Avoid_: importazione, bozza di piano, revisione di osservazione
+
+**Verdetto di sicurezza**:
+Decisione del coach che stabilisce se una bozza è approvabile, richiede attenzione o è bloccata applicando policy e precedenze deterministiche.
+_Avoid_: diagnosi, avviso testuale, giudizio LLM
+
+**Piano vigente**:
+Unica versione approvata che governa il periodo corrente; resta distinta dalle bozze e può diventare obsoleta o invalidata senza essere riscritta retroattivamente.
+_Avoid_: ultimo piano generato, bozza più recente, piano automatico
+
+**Registro di cancellazione**:
+Traccia non identificante di una cancellazione esplicita, limitata a operazione, istante e conteggi e priva di valori, identificatori fonte o hash dei dati rimossi.
+_Avoid_: backup, payload eliminato, audit completo
+
+**Pacchetto di pianificazione**:
+Revisione coerente e approvata atomicamente che riunisce traiettoria verso l'obiettivo, piano di blocco e piano settimanale; soltanto le sedute del piano settimanale governano l'esecuzione.
+_Avoid_: singolo file del piano, bozza di piano, piano settimanale
+
+**Traiettoria verso l'obiettivo**:
+Vista versionata del percorso macro verso l'obiettivo attivo, distinta sia dal blocco corrente sia dalle sedute eseguibili della settimana.
+_Avoid_: piano stagionale vigente, previsione gara, obiettivo
+
+**Piano di blocco**:
+Vista versionata delle priorità e della struttura delle successive quattro settimane, priva di autorità esecutiva sulle singole sedute.
+_Avoid_: piano mensile, piano settimanale, calendario vigente
+
+**Piano settimanale**:
+Componente eseguibile del pacchetto di pianificazione che contiene le sedute pianificate dei successivi sette giorni.
+_Avoid_: blocco, bozza, settimana osservata
