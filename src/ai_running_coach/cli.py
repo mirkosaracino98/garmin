@@ -177,8 +177,10 @@ def run_setup(arguments: argparse.Namespace) -> dict[str, Any]:
         goal["mode"] = arguments.goal_mode
     if arguments.goal_priority is not None:
         goal["priority"] = arguments.goal_priority
-    if arguments.target_time is not None or arguments.goal_mode is not None:
+    if arguments.target_time is not None:
         goal["target_time_seconds"] = _parse_target_time(arguments.target_time, goal.get("mode", ""))
+    elif arguments.goal_mode == "completion":
+        goal["target_time_seconds"] = None
 
     missing = [
         label
@@ -195,6 +197,12 @@ def run_setup(arguments: argparse.Namespace) -> dict[str, Any]:
     ]
     if missing:
         raise ValueError(f"missing setup input: {', '.join(missing)}")
+    if goal["type"] not in GOAL_TYPES:
+        raise ValueError(f"goal type must be one of: {', '.join(GOAL_TYPES)}")
+    if goal["mode"] not in ("completion", "time"):
+        raise ValueError("goal mode must be completion or time")
+    if goal["priority"] not in ("low", "medium", "high"):
+        raise ValueError("goal priority must be low, medium, or high")
     available_days = availability["available_days"]
     if preferences["preferred_long_run_day"] not in available_days:
         raise ValueError("preferred long-run day must be one of the available days")

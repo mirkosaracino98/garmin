@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from contextlib import closing
 from dataclasses import dataclass
 from datetime import UTC, datetime
 import hashlib
@@ -7,6 +8,7 @@ import json
 import os
 from pathlib import Path
 import sqlite3
+import stat
 from typing import Any
 from uuid import uuid4
 
@@ -19,7 +21,7 @@ SCHEMA_VERSION = "1.0"
 
 
 @dataclass(frozen=True)
-class RevisionResult:
+class ConfigurationRevisionResult:
     logical_id: str
     revision_id: str
     created: bool
@@ -38,14 +40,14 @@ class AthleteStore:
         self,
         configurations: dict[str, dict[str, Any]],
         run_id: str,
-    ) -> dict[str, RevisionResult]:
+    ) -> dict[str, ConfigurationRevisionResult]:
         self.home.mkdir(parents=True, exist_ok=True)
         existed = self.database_path.exists()
         if existed:
             diagnosis = self.diagnose()
             if diagnosis["status"] != "valid":
                 raise IncompatibleStoreError(str(diagnosis["message"]))
-        with sqlite3.connect(self.database_path) as connection:
+        with closing(sqlite3.connect(self.database_path)) as connection, connection:
             connection.execute("PRAGMA foreign_keys = ON")
             self._initialize(connection)
             effective_from = datetime.now(UTC).isoformat()
@@ -92,7 +94,7 @@ class AthleteStore:
         diagnosis = self.diagnose()
         if diagnosis["status"] != "valid":
             raise IncompatibleStoreError(str(diagnosis["message"]))
-        with sqlite3.connect(self.database_path) as connection:
+        with closing(sqlite3.connect(self.database_path)) as connection:
             rows = connection.execute(
                 """
                 SELECT kind, payload_json
@@ -109,8 +111,18 @@ class AthleteStore:
                 "status": "not_initialized",
                 "message": "local store has not been initialized; run running-coach setup",
             }
+        permission_problem = self._permission_problem()
+        if permission_problem is not None:
+            return {
+                "name": "store",
+                "status": "incompatible",
+                "message": f"local store permission check failed: {permission_problem}",
+                "supported_schema_major": SCHEMA_MAJOR,
+            }
         try:
-            with sqlite3.connect(f"file:{self.database_path}?mode=ro", uri=True) as connection:
+            with closing(
+                sqlite3.connect(f"file:{self.database_path}?mode=ro", uri=True)
+            ) as connection:
                 return self._diagnose_connection(connection)
         except sqlite3.DatabaseError as error:
             return {
@@ -119,6 +131,17 @@ class AthleteStore:
                 "message": f"local store is not a readable SQLite database: {error}",
                 "supported_schema_major": SCHEMA_MAJOR,
             }
+
+    def _permission_problem(self) -> str | None:
+        required_access = os.R_OK | os.W_OK
+        if not os.access(self.home, required_access):
+            return "the store directory must be readable and writable"
+        if not os.access(self.database_path, required_access):
+            return "the database must be readable and writable"
+        attributes = getattr(self.database_path.stat(), "st_file_attributes", 0)
+        if attributes & getattr(stat, "FILE_ATTRIBUTE_READONLY", 0):
+            return "the database is marked read-only"
+        return None
 
     def _diagnose_connection(self, connection: sqlite3.Connection) -> dict[str, Any]:
         application_id = int(connection.execute("PRAGMA application_id").fetchone()[0])
@@ -160,7 +183,7 @@ class AthleteStore:
             "SELECT kind, payload_json FROM configuration_revisions WHERE is_current = 1"
         ).fetchall()
         required_kinds = {"profile", "availability", "preferences", "goal"}
-        if {row[0] for row in current_rows} != required_kinds:
+        if len(current_rows) != len(required_kinds) or {row[0] for row in current_rows} != required_kinds:
             return {
                 "name": "store",
                 "status": "incompatible",
@@ -219,7 +242,7 @@ class AthleteStore:
                 recorded_at TEXT NOT NULL
             );
             CREATE UNIQUE INDEX IF NOT EXISTS one_current_configuration_revision
-                ON configuration_revisions(kind, logical_id)
+                ON configuration_revisions(kind)
                 WHERE is_current = 1;
             """
         )
@@ -235,7 +258,7 @@ class AthleteStore:
         payload: dict[str, Any],
         run_id: str,
         effective_from: str,
-    ) -> RevisionResult:
+    ) -> ConfigurationRevisionResult:
         logical_id = {
             "profile": "profile_athlete",
             "availability": "availability_weekly",
@@ -253,7 +276,7 @@ class AthleteStore:
             (kind, logical_id),
         ).fetchone()
         if current is not None and current[1] == content_hash:
-            return RevisionResult(logical_id, current[0], False)
+            return ConfigurationRevisionResult(logical_id, current[0], False)
 
         revision_id = f"rev_{uuid4().hex}"
         previous_revision_id = current[0] if current is not None else None
@@ -282,4 +305,4 @@ class AthleteStore:
                 run_id,
             ),
         )
-        return RevisionResult(logical_id, revision_id, True)
+        return ConfigurationRevisionResult(logical_id, revision_id, True)

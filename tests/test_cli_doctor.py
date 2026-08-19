@@ -1,22 +1,20 @@
 from __future__ import annotations
 
 import json
-import os
 from pathlib import Path
 import sqlite3
-import subprocess
-import sys
+import stat
 import tempfile
 import unittest
 
+from tests.cli_helpers import run_cli, valid_setup_arguments
 
-REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
 
 
 class DoctorCliTests(unittest.TestCase):
     def test_doctor_reports_uninitialized_store_without_creating_it(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            result = self.run_cli(temporary_directory, "doctor", "--format", "json")
+            result = run_cli(temporary_directory, "doctor", "--format", "json")
 
             self.assertEqual(result.returncode, 3, result.stderr)
             response = json.loads(result.stdout)
@@ -27,10 +25,10 @@ class DoctorCliTests(unittest.TestCase):
 
     def test_doctor_reports_valid_initialized_store(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            setup = self.run_cli(temporary_directory, *self.valid_setup_arguments())
+            setup = run_cli(temporary_directory, *valid_setup_arguments())
             self.assertEqual(setup.returncode, 0, setup.stderr)
 
-            result = self.run_cli(temporary_directory, "doctor", "--format", "json")
+            result = run_cli(temporary_directory, "doctor", "--format", "json")
 
             self.assertEqual(result.returncode, 0, result.stderr)
             response = json.loads(result.stdout)
@@ -42,7 +40,7 @@ class DoctorCliTests(unittest.TestCase):
 
     def test_doctor_reports_incompatible_store(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            setup = self.run_cli(temporary_directory, *self.valid_setup_arguments())
+            setup = run_cli(temporary_directory, *valid_setup_arguments())
             self.assertEqual(setup.returncode, 0, setup.stderr)
             database_path = Path(temporary_directory) / "store.sqlite3"
             connection = sqlite3.connect(database_path)
@@ -51,7 +49,7 @@ class DoctorCliTests(unittest.TestCase):
             finally:
                 connection.close()
 
-            result = self.run_cli(temporary_directory, "doctor", "--format", "json")
+            result = run_cli(temporary_directory, "doctor", "--format", "json")
 
             self.assertEqual(result.returncode, 5, result.stderr)
             response = json.loads(result.stdout)
@@ -60,39 +58,50 @@ class DoctorCliTests(unittest.TestCase):
             self.assertEqual(response["checks"][0]["found_schema_major"], 2)
             self.assertEqual(response["checks"][0]["supported_schema_major"], 1)
 
-    def run_cli(self, home: str, *arguments: str) -> subprocess.CompletedProcess[str]:
-        environment = os.environ.copy()
-        environment["RUNNING_COACH_HOME"] = home
-        environment["PYTHONPATH"] = str(REPOSITORY_ROOT / "src")
-        return subprocess.run(
-            [sys.executable, "-m", "ai_running_coach", *arguments],
-            cwd=REPOSITORY_ROOT,
-            env=environment,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
+    def test_doctor_rejects_multiple_current_goals(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            setup = run_cli(temporary_directory, *valid_setup_arguments())
+            self.assertEqual(setup.returncode, 0, setup.stderr)
+            database_path = Path(temporary_directory) / "store.sqlite3"
+            connection = sqlite3.connect(database_path)
+            try:
+                connection.execute("DROP INDEX one_current_configuration_revision")
+                connection.execute(
+                    """
+                    INSERT INTO configuration_revisions(
+                        kind, logical_id, revision_id, previous_revision_id, schema_version,
+                        payload_json, content_hash, effective_from, recorded_at, run_id, is_current
+                    )
+                    SELECT kind, 'goal_other', 'rev_other', previous_revision_id, schema_version,
+                           payload_json, content_hash, effective_from, recorded_at, run_id, 1
+                    FROM configuration_revisions
+                    WHERE kind = 'goal' AND is_current = 1
+                    """
+                )
+                connection.commit()
+            finally:
+                connection.close()
 
-    def valid_setup_arguments(self) -> list[str]:
-        return [
-            "setup",
-            "--non-interactive",
-            "--name",
-            "Ada",
-            "--available-days",
-            "tuesday,thursday,sunday",
-            "--preferred-long-run-day",
-            "sunday",
-            "--goal-type",
-            "10k",
-            "--goal-date",
-            "2027-04-11",
-            "--goal-mode",
-            "completion",
-            "--goal-priority",
-            "high",
-        ]
+            result = run_cli(temporary_directory, "doctor", "--format", "json")
 
+            self.assertEqual(result.returncode, 5, result.stderr)
+            self.assertEqual(json.loads(result.stdout)["checks"][0]["status"], "incompatible")
+
+    def test_doctor_rejects_store_without_write_permission(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            setup = run_cli(temporary_directory, *valid_setup_arguments())
+            self.assertEqual(setup.returncode, 0, setup.stderr)
+            database_path = Path(temporary_directory) / "store.sqlite3"
+            database_path.chmod(stat.S_IREAD)
+            try:
+                result = run_cli(temporary_directory, "doctor", "--format", "json")
+            finally:
+                database_path.chmod(stat.S_IREAD | stat.S_IWRITE)
+
+            self.assertEqual(result.returncode, 5, result.stderr)
+            response = json.loads(result.stdout)
+            self.assertEqual(response["checks"][0]["status"], "incompatible")
+            self.assertIn("permission", response["checks"][0]["message"])
 
 if __name__ == "__main__":
     unittest.main()

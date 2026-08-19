@@ -48,6 +48,10 @@ _Avoid_: confidenza, attendibilità atletica, qualità del piano
 Versione immutabile di un'osservazione logica già acquisita, creata quando la fonte cambia il fatto associato alla stessa identità; una sola revisione è corrente, mentre le precedenti restano tracciabili.
 _Avoid_: duplicato, nuova attività, migrazione dello schema
 
+**Revisione di configurazione**:
+Versione immutabile di profilo, obiettivo, disponibilità o preferenze dell'atleta; per ogni tipo una sola revisione è corrente, mentre le precedenti restano tracciabili.
+_Avoid_: configurazione sovrascritta, configurazione corrente mutabile, revisione di osservazione
+
 **Segnale derivato**:
 Risultato rigenerabile calcolato da osservazioni normalizzate mediante una regola identificata e versionata.
 _Avoid_: dato normalizzato, osservazione, verdetto

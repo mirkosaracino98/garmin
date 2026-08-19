@@ -1,21 +1,32 @@
 from __future__ import annotations
 
 import json
+import io
 import os
 from pathlib import Path
-import subprocess
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
+
+from tests.cli_helpers import run_cli, valid_setup_arguments
 
 
 REPOSITORY_ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(REPOSITORY_ROOT / "src"))
+
+from ai_running_coach.cli import main  # noqa: E402
+
+
+class TtyBuffer(io.StringIO):
+    def isatty(self) -> bool:
+        return True
 
 
 class SetupCliTests(unittest.TestCase):
     def test_athlete_can_initialize_store_non_interactively(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            result = self.run_cli(
+            result = run_cli(
                 temporary_directory,
                 "setup",
                 "--non-interactive",
@@ -55,9 +66,9 @@ class SetupCliTests(unittest.TestCase):
 
     def test_replay_is_idempotent_and_correction_revises_only_changed_configuration(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            original = self.run_cli(temporary_directory, *self.valid_setup_arguments())
-            replay = self.run_cli(temporary_directory, *self.valid_setup_arguments())
-            correction = self.run_cli(
+            original = run_cli(temporary_directory, *valid_setup_arguments())
+            replay = run_cli(temporary_directory, *valid_setup_arguments())
+            correction = run_cli(
                 temporary_directory,
                 "setup",
                 "--non-interactive",
@@ -120,7 +131,7 @@ class SetupCliTests(unittest.TestCase):
                 if target_time is not None:
                     arguments.extend(("--target-time", target_time))
 
-                result = self.run_cli(temporary_directory, *arguments)
+                result = run_cli(temporary_directory, *arguments)
 
                 self.assertEqual(result.returncode, 0, result.stderr)
                 response = json.loads(result.stdout)
@@ -129,10 +140,10 @@ class SetupCliTests(unittest.TestCase):
 
     def test_non_tty_requires_explicit_non_interactive_mode(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            arguments = self.valid_setup_arguments()
+            arguments = valid_setup_arguments()
             arguments.remove("--non-interactive")
 
-            result = self.run_cli(temporary_directory, *arguments)
+            result = run_cli(temporary_directory, *arguments)
 
             self.assertEqual(result.returncode, 2)
             self.assertEqual(
@@ -143,7 +154,7 @@ class SetupCliTests(unittest.TestCase):
 
     def test_invalid_non_interactive_input_returns_structured_error(self) -> None:
         with tempfile.TemporaryDirectory() as temporary_directory:
-            result = self.run_cli(
+            result = run_cli(
                 temporary_directory,
                 "setup",
                 "--non-interactive",
@@ -158,41 +169,30 @@ class SetupCliTests(unittest.TestCase):
             self.assertNotEqual(response["error"]["message"], "")
             self.assertEqual(result.stderr, "")
 
-    def valid_setup_arguments(self) -> list[str]:
-        return [
-            "setup",
-            "--non-interactive",
-            "--name",
-            "Ada",
-            "--available-days",
-            "tuesday,thursday,sunday",
-            "--preferred-long-run-day",
-            "sunday",
-            "--goal-type",
-            "10k",
-            "--goal-date",
-            "2027-04-11",
-            "--goal-mode",
-            "time",
-            "--target-time",
-            "00:49:30",
-            "--goal-priority",
-            "high",
-        ]
+    def test_prompted_goal_values_are_validated(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary_directory:
+            output = TtyBuffer()
+            prompted_values = [
+                "Ada",
+                "Europe/Rome",
+                "tuesday,thursday,sunday",
+                "sunday",
+                "ultramarathon",
+                "2027-04-11",
+                "completion",
+                "high",
+            ]
+            with (
+                patch.dict(os.environ, {"RUNNING_COACH_HOME": temporary_directory}),
+                patch("sys.stdin", TtyBuffer()),
+                patch("sys.stdout", output),
+                patch("builtins.input", side_effect=prompted_values),
+            ):
+                exit_code = main(["setup", "--format", "json"])
 
-    def run_cli(self, home: str, *arguments: str) -> subprocess.CompletedProcess[str]:
-        environment = os.environ.copy()
-        environment["RUNNING_COACH_HOME"] = home
-        environment["PYTHONPATH"] = str(REPOSITORY_ROOT / "src")
-        return subprocess.run(
-            [sys.executable, "-m", "ai_running_coach", *arguments],
-            cwd=REPOSITORY_ROOT,
-            env=environment,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-
+            self.assertEqual(exit_code, 2)
+            self.assertEqual(json.loads(output.getvalue())["error"]["code"], "INVALID_INPUT")
+            self.assertFalse((Path(temporary_directory) / "store.sqlite3").exists())
 
 if __name__ == "__main__":
     unittest.main()
