@@ -128,6 +128,14 @@ _Avoid_: adattamento automatico, modifica applicata, auto-approvazione
 Seduta running o cycling che occupa uno dei due slot settimanali di stress elevato per intensità, struttura o durata relativa; una corsa lunga facile vi rientra solo quando il suo profilo la rende impegnativa.
 _Avoid_: allenamento importante, seduta chiave, qualsiasi lungo
 
+**Limite automatico del lungo**:
+Durata massima, dipendente dall'obiettivo running attivo, entro cui il coach può inserire una corsa lunga in una bozza senza conferma specifica; è un guardrail configurabile e non una soglia clinica né un divieto per l'atleta.
+_Avoid_: durata sicura, limite medico, lungo massimo assoluto
+
+**Settimana di scarico**:
+Settimana pianificata di assorbimento che riduce il volume running e gli slot di stress elevato senza dimostrare tolleranza a un carico superiore.
+_Avoid_: settimana persa, settimana facile, settimana tollerata
+
 **Alternativa conservativa giornaliera**:
 Variazione temporanea e non persistente che riduce o elimina lo stress della seduta corrente senza modificare la versione approvata del piano.
 _Avoid_: adattamento del piano, ripianificazione automatica, nuova versione
@@ -135,6 +143,10 @@ _Avoid_: adattamento del piano, ripianificazione automatica, nuova versione
 **Segnale negativo concordante**:
 Condizione prudenziale in cui un trend Whoop sfavorevole rispetto alla baseline personale coincide con almeno un'evidenza indipendente soggettiva, prestativa o di carico; non costituisce una valutazione clinica.
 _Avoid_: recovery basso, diagnosi, singolo giorno negativo
+
+**Segnale di interruzione**:
+Sintomo dichiarato o osservazione anomala che impone di interrompere la seduta e produce un verdetto di sicurezza bloccato senza formulare diagnosi né idoneità medica.
+_Avoid_: red flag, diagnosi automatica, soglia clinica
 
 **Settimana tollerata**:
 Finestra di sette giorni con evidenze sufficienti in cui il carico eseguito resta entro l'intervallo approvato e non emergono sintomi o segnali negativi concordanti; una settimana deliberatamente ridotta non dimostra tolleranza a un carico superiore.
